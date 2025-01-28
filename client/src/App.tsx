@@ -1,16 +1,17 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import ListingForm from "./component/ListingForm";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App: React.FC = () => {
+  const handleFormSubmit = (formData: any) => {
+    console.log("Form submitted:", formData);
+  };
 
   return (
-    <>
-       
-    </>
-  )
-}
+    <div>
+      <h1>Marketplace</h1>
+      <ListingForm onSubmit={handleFormSubmit} />
+    </div>
+  );
+};
 
-export default App
+export default App;

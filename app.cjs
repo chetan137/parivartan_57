@@ -19,9 +19,8 @@ const app = express();
 
 
 
-const mongoURI2= process.env.MONGO;
+const mongoURI= process.env.MONGO2;
 
-const mongoURI = "mongodb+srv://23106034:I7hSKlX9bvZD0NXQ@chetan.meqsl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 
 
