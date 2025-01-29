@@ -1,4 +1,6 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
+
 const SellerSchema = new mongoose.Schema({
     name: { type: String, required: true },
     mobileNo: { type: String, required: true },
@@ -6,14 +8,22 @@ const SellerSchema = new mongoose.Schema({
     city: { type: String, required: true },
     pincode: { type: String, required: true },
     password: { type: String, required: true },
-    categories: { type: [String], required: true }, // Example: ["farmer", "potter", "painter"]
-    totalSales: { type: Number, default: 0 }, // Total sales by the seller
-    earnings: { type: Number, default: 0 }, // Total earnings
+    categories: { type: [String], required: true },
+    totalSales: { type: Number, default: 0 },
+    earnings: { type: Number, default: 0 },
     bankDetails: {
         accountHolderName: { type: String },
         accountNumber: { type: String },
-        ifscCode: { type: String }
-    }
+        ifscCode: { type: String },
+    },
 });
-const Seller = mongoose.model('Seller', SellerSchema);
-module.exports = { Seller};
+
+// Hash password before saving
+SellerSchema.pre("save", async function (next) {
+    if (!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password, 10);
+    next();
+});
+
+const Seller = mongoose.model("Seller", SellerSchema);
+module.exports = Seller;

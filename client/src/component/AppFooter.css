@@ -1,0 +1,49 @@
+/* Make sure the page layout fills the entire height */
+#root,
+html,
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Ensures the content area expands and pushes the footer down */
+.app-layout {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Footer Styling */
+.app-footer {
+    background: #f8f9fa;
+    padding: 20px;
+    text-align: center;
+    margin-top: auto;
+    /* Pushes the footer to the bottom */
+}
+
+/* Footer Text */
+.footer-text {
+    font-size: 16px;
+    color: #333;
+}
+
+/* Divider Styling */
+.footer-divider {
+    margin: 10px 0;
+    border-color: #ddd;
+}
+
+/* Footer Links */
+.footer-link {
+    color: #1890ff;
+    font-size: 14px;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-link:hover {
+    color: #0056b3;
+}

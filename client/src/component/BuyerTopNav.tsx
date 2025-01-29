@@ -1,37 +1,32 @@
 import React from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  InputBase,
-  Badge,
-
-} from "@mui/material";
+import { AppBar, Toolbar, IconButton, InputBase, Badge } from "@mui/material";
 import {
   Search as SearchIcon,
   ShoppingCart as ShoppingCartIcon,
   Notifications as NotificationsIcon,
   AccountCircle,
 } from "@mui/icons-material";
-import { Dropdown, Button } from "antd";
+import { Dropdown, Button, Menu } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
 const BuyerTopNav: React.FC = () => {
   const [, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  // const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
-  //   setAnchorEl(event.currentTarget);
-  // };
-
   const handleClose = () => {
     setAnchorEl(null);
   };
 
-  const menuItems = [
-    { key: "1", label: "Profile" },
-    { key: "2", label: "Settings" },
-    { key: "3", label: "Log out" },
-  ];
+  // Create an Ant Design Menu for Dropdown
+  const menu = (
+    <Menu
+      onClick={handleClose}
+      items={[
+        { key: "1", label: "Profile" },
+        { key: "2", label: "Settings" },
+        { key: "3", label: "Log out" },
+      ]}
+    />
+  );
 
   return (
     <AppBar
@@ -74,14 +69,12 @@ const BuyerTopNav: React.FC = () => {
           </IconButton>
 
           {/* User Dropdown */}
-          <Dropdown
-            overlay={{
-              items: menuItems,
-              onClick: handleClose,
-            }}
-            trigger={["click"]}
-          >
-            <Button type="text" icon={<AccountCircle />}>
+          <Dropdown overlay={menu} trigger={["click"]}>
+            <Button
+              type="text"
+              icon={<AccountCircle />}
+              onClick={(e) => e.preventDefault()}
+            >
               My Account <DownOutlined />
             </Button>
           </Dropdown>
