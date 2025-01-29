@@ -7,13 +7,28 @@ passport.use(
     new LocalStrategy({ usernameField: "mobileNo" }, async (mobileNo, password, done) => {
         try {
             const seller = await Seller.findOne({ mobileNo });
-            if (!seller) return done(null, false, { message: "Seller not found" });
+
+            if (!seller) {
+                console.log("❌ Seller not found for mobile:", mobileNo);
+                return done(null, false, { message: "Seller not found" });
+            }
+
+            console.log("✅ Seller Found:", seller);
+
+            console.log("🔑 Entered Password:", password);
+            console.log("🔒 Hashed Password from DB:", seller.password);
 
             const isMatch = await bcrypt.compare(password, seller.password);
-            if (!isMatch) return done(null, false, { message: "Incorrect password" });
 
+            if (!isMatch) {
+                console.log("❌ Password mismatch");
+                return done(null, false, { message: "Incorrect password" });
+            }
+
+            console.log("✅ Login Successful");
             return done(null, seller);
         } catch (err) {
+            console.error("❌ Error in Passport Strategy:", err);
             return done(err);
         }
     })
@@ -31,3 +46,5 @@ passport.deserializeUser(async (id, done) => {
         done(err);
     }
 });
+
+module.exports = passport;

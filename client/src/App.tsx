@@ -10,7 +10,11 @@ import OrderManagement from "./component/OrderManagement";
 import AppNavbar from "./component/AppNavbar";
 import BuyerDashboard from "./component/BuyerDashboard";
 import Marketplace from "./component/Marketplace"
-
+import Order from "./component/Orders"
+import BuyInfo from "./component/DashboardB"
+import SellerRegister from "./component/SellerRegister";
+import SellerLogin from "./component/SellerLogin";
+import BuyerReviews from "./component/BuyerReviews";
 const { Content } = Layout; // ✅ Fix: Import Content from Ant Design
 
 const App = () => {
@@ -36,10 +40,16 @@ const App = () => {
             />
             <Route path="/login" element={<Register />} />
             <Route path="/productM" element={<ProductManagement />} />
-            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/" element={<Dashboard />} />
+            <Route path="/seller-register" element={<SellerRegister />} />
+            <Route path="/seller-login" element={<SellerLogin />} />
             <Route path="/orderManagement" element={<OrderManagement />} />
             <Route path="/BuyerDashboard" element={<BuyerDashboard />} />
             <Route path="/Marketplace" element={<Marketplace />} />
+            <Route path="/BuyInfo" element={<BuyInfo />} />
+            <Route path="/orders" element={<Order />} />
+             
+            <Route path="/BuyerReviews" element={<BuyerReviews />} />
           </Routes>
         </Content>
 

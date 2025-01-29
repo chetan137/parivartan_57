@@ -15,8 +15,8 @@ const AppFooter = () => {
 
       <nav>
         <Space size="large" wrap>
-          <Link to="/dashboard" style={linkStyle}>
-            Dashboard
+          <Link to="/BuyerDashboard" style={linkStyle}>
+            BuyerDashboard
           </Link>
           <Link to="/productM" style={linkStyle}>
             Product Management

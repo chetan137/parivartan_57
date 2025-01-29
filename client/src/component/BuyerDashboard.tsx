@@ -13,11 +13,7 @@ import {
   Typography,
 } from "antd";
 import { Link } from "react-router-dom";
-import {
-  ShoppingCartOutlined,
-  BellOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
+import { ShoppingCartOutlined, UserOutlined } from "@ant-design/icons";
 
 const { Sider, Content } = Layout;
 const { Title } = Typography;
@@ -37,13 +33,37 @@ interface Product {
   price: string;
 }
 
-// Main Dashboard Component
+// Static Data
+const staticOrders: Order[] = [
+  { id: "1", product: "Wheat (50kg)", date: "2024-01-12", status: "Delivered" },
+  {
+    id: "2",
+    product: "Organic Tomatoes (10kg)",
+    date: "2024-01-15",
+    status: "In Transit",
+  },
+  { id: "3", product: "Rice (25kg)", date: "2024-01-18", status: "Pending" },
+];
+
+const staticRecommendedProducts: Product[] = [
+  { id: "1", name: "Corn Seeds", category: "Seeds", price: "₹500/kg" },
+  {
+    id: "2",
+    name: "Organic Fertilizer",
+    category: "Fertilizers",
+    price: "₹1200/bag",
+  },
+  { id: "3", name: "Fresh Mangoes", category: "Fruits", price: "₹80/kg" },
+];
+
 const BuyerDashboard: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
   const [recommendedProducts, setRecommendedProducts] = useState<Product[]>([]);
 
   useEffect(() => {
-    // Placeholder effect for fetching data (Replace with actual API calls)
+    // Setting static data
+    setOrders(staticOrders);
+    setRecommendedProducts(staticRecommendedProducts);
   }, []);
 
   return (
@@ -58,7 +78,7 @@ const BuyerDashboard: React.FC = () => {
         }}
       >
         <Title level={4} style={{ color: "#fff", textAlign: "center" }}>
-          BuyerDash
+          AgriBuyer
         </Title>
         <Menu
           theme="dark"
@@ -81,19 +101,14 @@ const BuyerDashboard: React.FC = () => {
               My Orders
             </Link>
           </Menu.Item>
-          <Menu.Item key="messages">
-            <Link to="/messages" style={{ color: "#fff" }}>
-              Messages
+          <Menu.Item key="BuyInfo">
+            <Link to="/BuyInfo" style={{ color: "#fff" }}>
+              BuyInfo
             </Link>
           </Menu.Item>
           <Menu.Item key="reviews">
-            <Link to="/reviews" style={{ color: "#fff" }}>
+            <Link to="/BuyerReviews" style={{ color: "#fff" }}>
               My Reviews
-            </Link>
-          </Menu.Item>
-          <Menu.Item key="settings">
-            <Link to="/settings" style={{ color: "#fff" }}>
-              Settings
             </Link>
           </Menu.Item>
         </Menu>
@@ -120,11 +135,6 @@ const BuyerDashboard: React.FC = () => {
                   style={{ fontSize: 24, cursor: "pointer", color: "#2563EB" }}
                 />
               </Badge>
-              {/* <Badge count={5} style={{ marginRight: 20 }}>
-                <BellOutlined
-                  style={{ fontSize: 24, cursor: "pointer", color: "#2563EB" }}
-                />
-              </Badge> */}
               <UserOutlined
                 style={{ fontSize: 24, cursor: "pointer", color: "#2563EB" }}
               />
@@ -134,10 +144,10 @@ const BuyerDashboard: React.FC = () => {
           {/* Analytics Cards */}
           <Row gutter={[16, 16]}>
             {[
-              { title: "Total Spent", value: "₹45,000", color: "#1E3A8A" },
-              { title: "Orders Placed", value: "8", color: "#2563EB" },
-              { title: "Pending Reviews", value: "1", color: "#EAB308" },
-              { title: "Saved Sellers", value: "5", color: "#16A34A" },
+              { title: "Total Spent", value: "₹75,000", color: "#1E3A8A" },
+              { title: "Orders Placed", value: "15", color: "#2563EB" },
+              { title: "Pending Reviews", value: "3", color: "#EAB308" },
+              { title: "Saved Sellers", value: "7", color: "#16A34A" },
             ].map((card, index) => (
               <Col span={6} key={index}>
                 <Card
@@ -168,6 +178,7 @@ const BuyerDashboard: React.FC = () => {
                 <Table
                   dataSource={orders}
                   pagination={false}
+                  rowKey="id"
                   columns={[
                     { title: "Product", dataIndex: "product", key: "product" },
                     { title: "Date", dataIndex: "date", key: "date" },
@@ -196,6 +207,7 @@ const BuyerDashboard: React.FC = () => {
                 <Table
                   dataSource={recommendedProducts}
                   pagination={false}
+                  rowKey="id"
                   columns={[
                     { title: "Name", dataIndex: "name", key: "name" },
                     {

@@ -10,7 +10,7 @@ const AppNavbar = () => {
 
   return (
     <Header style={headerStyle}>
-      <Link to="/dashboard">Home</Link>
+      <Link to="/">Home</Link>
       <Menu
         theme="dark"
         mode="horizontal"
