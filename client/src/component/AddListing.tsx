@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Form, Input, Button, Upload, Select, InputNumber } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-
 import {
   fetchSellerDetails,
   createListing,
@@ -14,12 +13,34 @@ interface ListingFormProps {
   sellerId: string;
 }
 
+const farmerItems = [
+  "Wheat",
+  "Rice",
+  "Vegetables",
+  "Fruits",
+  "Organic Honey",
+  "Milk & Dairy",
+  "Spices",
+  "Pulses",
+];
+
 const AddListing: React.FC<ListingFormProps> = ({ sellerId }) => {
   const [category, setCategory] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    fetchSellerDetails(sellerId).then((data) => setCategory(data.category));
+    const getCategory = async () => {
+      try {
+        const data = await fetchSellerDetails(sellerId);
+        setCategory(data.category || "farmer"); // Default to "farmer" if no data found
+      } catch (error) {
+        console.error("Error fetching seller details:", error);
+        setCategory("farmer"); // Default to "farmer" if an error occurs
+      }
+    };
+
+    getCategory();
   }, [sellerId]);
 
   const handleSubmit = async (values: any) => {
@@ -49,15 +70,37 @@ const AddListing: React.FC<ListingFormProps> = ({ sellerId }) => {
       <h2>Add a Listing</h2>
       {category ? (
         <Form layout="vertical" form={form} onFinish={handleSubmit}>
-          {category === "farmer" && (
+          {/* Dropdown for Farmers to Select Item */}
+          {(category === "farmer" || !category) && (
             <>
+              <Form.Item
+                name="selectedItem"
+                label="Select Item to Sell"
+                rules={[{ required: true, message: "Please select an item" }]}
+              >
+                <Select placeholder="Choose an item" onChange={setSelectedItem}>
+                  {farmerItems.map((item) => (
+                    <Option key={item} value={item}>
+                      {item}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
               <Form.Item
                 name="materialName"
                 label="Material Name"
-                rules={[{ required: true }]}
+                initialValue={selectedItem || ""}
+                rules={[
+                  { required: true, message: "Please enter a material name" },
+                ]}
               >
-                <Input placeholder="Enter material name" />
+                <Input
+                  placeholder="Enter material name"
+                  value={selectedItem || ""}
+                />
               </Form.Item>
+
               <Form.Item
                 name="description"
                 label="Description"
@@ -67,7 +110,7 @@ const AddListing: React.FC<ListingFormProps> = ({ sellerId }) => {
               </Form.Item>
               <Form.Item
                 name="rate"
-                label="Rate (₹)"
+                label="Rate (₹ per kg/liter)"
                 rules={[{ required: true }]}
               >
                 <InputNumber min={1} style={{ width: "100%" }} />

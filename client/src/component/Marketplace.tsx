@@ -22,6 +22,43 @@ const { Sider, Content } = Layout;
 const { Title, Text } = Typography;
 const { Option } = Select;
 
+
+
+// RAZORPAY_KEY_ID = rzp_test_qHzHvYcPhcNfSz;
+// RAZORPAY_SECRET = jPNe8BBkxCu64X3YPyLqMJpZ;
+// Razorpay Integration Function
+const loadRazorpay = (productName: string, price: string, seller: string) => {
+  const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+  script.onload = () => {
+    const options = {
+      key: "rzp_test_qHzHvYcPhcNfSz", // Replace with your Razorpay key
+      amount: parseInt(price.replace("₹", "").replace(",", "")) * 100, // Convert price to paise
+      currency: "INR",
+      name: "AgriBuyer Marketplace",
+      description: `Buying ${productName} from ${seller}`,
+      image: "https://your-logo-url.com/logo.png", // Optional: Add your business logo
+      handler: function (response: any) {
+        alert(
+          `Payment Successful! Payment ID: ${response.razorpay_payment_id}`
+        );
+      },
+      prefill: {
+        name: "chetan", // Replace with actual buyer details
+        email: "chetan@example.com",
+        contact: "9876543210",
+      },
+      theme: {
+        color: "#2563EB",
+      },
+    };
+    const rzp = new (window as any).Razorpay(options);
+    rzp.open();
+  };
+  document.body.appendChild(script);
+};
+
 // Static Product Data
 const allProducts = [
   {
@@ -57,17 +94,7 @@ const allProducts = [
     image:
       "https://5.imimg.com/data5/SELLER/Default/2023/4/300080373/TD/ZT/JJ/28816920/clay-tea-cup-set.jpg",
   },
-  {
-    id: "3",
-    name: "Clay Tea Set",
-    category: "Handicrafts",
-    price: "₹899",
-    location: "Rajasthan",
-    rating: 4.2,
-    seller: "Artisan Pottery Hub",
-    image:
-      "https://5.imimg.com/data5/SELLER/Default/2023/4/300080373/TD/ZT/JJ/28816920/clay-tea-cup-set.jpg",
-  },
+
   {
     id: "4",
     name: "Handmade Jute Bag",
@@ -103,7 +130,6 @@ const allProducts = [
 ];
 
 const Marketplace = () => {
-  const [cartCount, setCartCount] = useState(2);
   const [category, setCategory] = useState("All");
   const [location, setLocation] = useState("All");
   const [filteredProducts, setFilteredProducts] = useState(allProducts);
@@ -120,39 +146,40 @@ const Marketplace = () => {
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider
-              width={260}
-              style={{
-                background: "linear-gradient(180deg, #1E3A8A, #2563EB)",
-                color: "#fff",
-                paddingTop: "20px",
-              }}
-            >
-              <Title level={4} style={{ color: "#fff", textAlign: "center" }}>
-                BuyerDash
-              </Title>
-              <Menu
-                theme="dark"
-                mode="vertical"
-                defaultSelectedKeys={["dashboard"]}
-                style={{ background: "transparent" }}
-              >
-                <Menu.Item key="dashboard">
-                  <Link to="/BuyerDashboard">Dashboard</Link>
-                </Menu.Item>
-                <Menu.Item key="marketplace">
-                  <Link to="/Marketplace">Marketplace</Link>
-                </Menu.Item>
-                <Menu.Item key="orders">
-                  <Link to="/orders">My Orders</Link>
-                </Menu.Item>
-                <Menu.Item key="BuyInfo">
-                  <Link to="/BuyInfo">BuyInfo</Link>
-                </Menu.Item>
-                <Menu.Item key="reviews">
-                  <Link to="/BuyerReviews">My Reviews</Link>
-                </Menu.Item>
-              </Menu>
-            </Sider>
+        width={260}
+        style={{
+          background: "linear-gradient(180deg, #1E3A8A, #2563EB)",
+          color: "#fff",
+          paddingTop: "20px",
+        }}
+      >
+        <Title level={4} style={{ color: "#fff", textAlign: "center" }}>
+          BuyerDash
+        </Title>
+        <Menu
+          theme="dark"
+          mode="vertical"
+          defaultSelectedKeys={["marketplace"]}
+          style={{ background: "transparent" }}
+        >
+          <Menu.Item key="dashboard">
+            <Link to="/BuyerDashboard">Dashboard</Link>
+          </Menu.Item>
+          <Menu.Item key="marketplace">
+            <Link to="/Marketplace">Marketplace</Link>
+          </Menu.Item>
+          <Menu.Item key="orders">
+            <Link to="/orders">My Orders</Link>
+          </Menu.Item>
+          <Menu.Item key="BuyInfo">
+            <Link to="/BuyInfo">BuyInfo</Link>
+          </Menu.Item>
+          <Menu.Item key="reviews">
+            <Link to="/BuyerReviews">My Reviews</Link>
+          </Menu.Item>
+        </Menu>
+      </Sider>
+
       <Layout style={{ padding: "20px", background: "#F8FAFC" }}>
         <Content>
           <Row
@@ -167,7 +194,7 @@ const Marketplace = () => {
               />
             </Col>
             <Col>
-              <Badge count={cartCount} style={{ marginRight: 20 }}>
+              <Badge count={2} style={{ marginRight: 20 }}>
                 <ShoppingCartOutlined
                   style={{ fontSize: 24, cursor: "pointer", color: "#2563EB" }}
                 />
@@ -234,9 +261,19 @@ const Marketplace = () => {
                   <Text>
                     <StarFilled style={{ color: "#FBBF24" }} /> {product.rating}
                   </Text>
-                  <Row justify="space-between" style={{ marginTop: 10 }}>
-                    <Button type="default">Add to Cart</Button>
-                    <Button type="primary">View Details</Button>
+                  <Row justify="end" style={{ marginTop: 10 }}>
+                    <Button
+                      type="primary"
+                      onClick={() =>
+                        loadRazorpay(
+                          product.name,
+                          product.price,
+                          product.seller
+                        )
+                      }
+                    >
+                      Buy Now
+                    </Button>
                   </Row>
                 </Card>
               </Col>
