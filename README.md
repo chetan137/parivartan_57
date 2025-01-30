@@ -1,4 +1,5 @@
-Step 1 : For backend Node server.cjs
+How to start <br>
+Step 1 : For backend Node server.cjs <br>
 step 2 : For Frontend Cd client then npn run dev 
 
 # Atmanirbhar Bharat Initiative - Empowering Farmers and Local Businesses
